@@ -3,12 +3,15 @@ package com.proyecto.pokeapp.ui.detail
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.proyecto.pokeapp.data.AppRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class DetailViewModel(private val appRepository: AppRepository) : ViewModel() {
+@HiltViewModel
+class DetailViewModel @Inject constructor(private val appRepository: AppRepository) : ViewModel() {
 
     private val _flavorText = MutableStateFlow<String?>(null)
     val flavorText: StateFlow<String?> = _flavorText.asStateFlow()

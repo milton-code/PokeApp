@@ -12,38 +12,43 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.proyecto.pokeapp.R
-import com.proyecto.pokeapp.ui.AppViewModelProvider
-import com.proyecto.pokeapp.ui.adapters.ListAdapter
+import com.proyecto.pokeapp.databinding.FragmentListBinding
+import com.proyecto.pokeapp.ui.adapters.PokeAbilityAdapter
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class ListFragment : Fragment() {
-    private val viewModel: ListViewModel by viewModels { AppViewModelProvider.Factory }
-    private lateinit var listAdapter: ListAdapter
+
+    private var _binding: FragmentListBinding? = null
+    private val binding get() = _binding!!
+
+    private val viewModel: ListViewModel by viewModels()
+    private lateinit var listAdapter: PokeAbilityAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_list, container, false)
+    ): View {
+        _binding = FragmentListBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view)
         val layoutManager = LinearLayoutManager(context)
-        recyclerView.layoutManager = layoutManager
-
-        listAdapter = ListAdapter { ability ->
+        listAdapter = PokeAbilityAdapter { ability ->
             val bundle = bundleOf("abilityUrl" to ability.url)
             findNavController().navigate(R.id.action_listFragment_to_detailFragment, bundle)
         }
-        recyclerView.adapter = listAdapter
 
-        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+        binding.recyclerView.layoutManager = layoutManager
+        binding.recyclerView.adapter = listAdapter
+
+        binding.recyclerView.addOnScrollListener(object : androidx.recyclerview.widget.RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: androidx.recyclerview.widget.RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
 
                 val visibleItemCount = layoutManager.childCount
@@ -63,5 +68,10 @@ class ListFragment : Fragment() {
                 }
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

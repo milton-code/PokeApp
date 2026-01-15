@@ -4,13 +4,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.proyecto.pokeapp.data.AppRepository
 import com.proyecto.pokeapp.data.models.Ability
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ListViewModel(private val appRepository: AppRepository) : ViewModel() {
+@HiltViewModel
+class ListViewModel @Inject constructor(private val appRepository: AppRepository) : ViewModel() {
 
     private val _items = MutableStateFlow<List<Ability>>(emptyList())
     val items: StateFlow<List<Ability>> = _items.asStateFlow()

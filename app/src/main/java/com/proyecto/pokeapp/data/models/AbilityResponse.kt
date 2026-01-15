@@ -1,9 +1,6 @@
 package com.proyecto.pokeapp.data.models
 
-import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.JsonIgnoreUnknownKeys
 
 @Serializable
 data class AbilityResponse(
